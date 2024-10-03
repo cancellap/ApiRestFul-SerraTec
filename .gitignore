@@ -1,0 +1,59 @@
+# Compiled class files
+*.class
+
+# Log files
+*.log
+
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# Spring Boot specific #
+/target/
+/out/
+
+# Eclipse files
+.classpath
+.project
+.settings/
+
+# Maven specific #
+log/
+target/
+!src/main/resources/static/
+/.mvn/
+/pom.xml.tag
+/pom.xml.releaseBackup
+/pom.xml.versionsBackup
+/pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+
+# Temporary files #
+*.swp
+*~.nib
+*.DS_Store
+*.sass-cache
+*.classpath
+*.project
+*.settings/
+bin/
+
+# OS generated files #
+.DS_Store
+Thumbs.db
+
+# Other Eclipse specific #
+/.metadata/
+/.recommenders/
+*.bak
+*.orig
+*.tmp
