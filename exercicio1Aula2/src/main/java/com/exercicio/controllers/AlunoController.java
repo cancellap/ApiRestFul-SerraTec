@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
@@ -42,8 +43,20 @@ public class AlunoController {
 		return aluno;
 	}
 
+	@PutMapping("/{matricula}")
+	public Aluno atualizar(@PathVariable Long matricula, @RequestBody Aluno aluno) {
+		for (int i=0; i<listaDeAluno.size(); i++) {
+			if (listaDeAluno.get(i).getMatricula().equals(matricula)) {
+				Aluno a = new Aluno(matricula, aluno.getNome(), aluno.getTelefone());
+				listaDeAluno.set(i, a);
+				return a;
+			}
+		}
+		return null;
+	}
+	
 	@DeleteMapping("/{matricula}")
-	public Aluno delete(@PathVariable Long matricula) {
-		return listaDeAluno.stream().filter(aluno -> aluno.getMatricula().equals(matricula)).findFirst().orElse(null);
+	public void delete(@PathVariable Long matricula) {
+		 listaDeAluno.removeIf(aluno -> aluno.getMatricula().equals(matricula));	
 	}
 }
