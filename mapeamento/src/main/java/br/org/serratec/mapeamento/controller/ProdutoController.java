@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.org.serratec.mapeamento.domain.Produto;
 import br.org.serratec.mapeamento.repository.ProdutoRepository;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/produtos")
@@ -40,24 +41,24 @@ public class ProdutoController {
 		}
 		return ResponseEntity.notFound().build();
 	}
-	
+
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Produto inserir(@RequestBody Produto produto) {
+	public Produto inserir(@Valid @RequestBody Produto produto) {
 		produto = produtoRepository.save(produto);
 		return produto;
 	}
-	
+
 	@PutMapping("/{id}")
-	public ResponseEntity<Produto> atualizar(@PathVariable Long id, @RequestBody Produto produto){
-		if(!produtoRepository.existsById(id)) {
+	public ResponseEntity<Produto> atualizar(@PathVariable Long id, @RequestBody Produto produto) {
+		if (!produtoRepository.existsById(id)) {
 			return ResponseEntity.notFound().build();
 		}
 		produto.setId(id);
 		produto = produtoRepository.save(produto);
-		return ResponseEntity.ok(produto);                      
+		return ResponseEntity.ok(produto);
 	}
-	
+
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deletar(@PathVariable Long id) {
 		if (!produtoRepository.existsById(id)) {

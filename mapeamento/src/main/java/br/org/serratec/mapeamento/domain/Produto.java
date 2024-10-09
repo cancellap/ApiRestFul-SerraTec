@@ -12,6 +12,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "produto")
@@ -22,10 +26,14 @@ public class Produto {
 	@Column(name = "id_produto")
 	private Long id;
 
+	@NotBlank(message = "prencha a descricao")
+	@Size(max = 40, message = "prencha a descricao")
 	@Column(name = "descricao_produto", nullable = false, length = 40)
 	private String descricao;
 
 	@Column(name = "valor_produto")
+	@DecimalMin(value = "1", message = "o preco so pode ser maior que R${value}.00")
+	@DecimalMax(value = "110000", message = "o preco nao pode ser maior que R${value}.00")
 	private BigDecimal valor;
 
 	@Column(name = "data_cadastro_produto")

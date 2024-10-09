@@ -3,6 +3,8 @@ package br.org.serratec.mapeamento.domain;
 import java.time.LocalDate;
 import java.util.Objects;
 
+import org.hibernate.validator.constraints.br.CPF;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -11,6 +13,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "cliente")
@@ -21,15 +26,19 @@ public class Cliente {
 	@Column(name = "id_cliente")
 	private Long id;
 
-	@Column(name = "nome_cliente", length = 100)
+	@NotBlank(message = "prencha o nome")
+	@Size(max = 60, message = "nome maior que 60 caracteres")
+	@Column(name = "nome_cliente")
 	private String nome;
 
+	@CPF(message = "CPF invalido")
 	@Column(name = "cpf_cliente")
 	private String cpf;
-	
+
+	@Email(message = "email invalido")
 	@Column(name = "email_cliente")
 	private String email;
-	
+
 	@Column(name = "data_nascimento_cliente")
 	@Temporal(TemporalType.DATE)
 	private LocalDate dataNascimento;
@@ -109,8 +118,5 @@ public class Cliente {
 		Cliente other = (Cliente) obj;
 		return Objects.equals(id, other.id);
 	}
-
-
-
 
 }

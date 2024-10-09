@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.org.serratec.mapeamento.domain.Cliente;
 import br.org.serratec.mapeamento.repository.ClienteRepository;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/cliente")
@@ -27,28 +28,28 @@ public class ClienteController {
 	private ClienteRepository clienteRepository;
 
 	@GetMapping
-	public List<Cliente> listarClientes() {
-		return clienteRepository.findAll();
+	public ResponseEntity<List<Cliente>> listarClientes() {
+		return ResponseEntity.ok(clienteRepository.findAll());
 	}
-	
+
 	@GetMapping("/{id}")
-	public ResponseEntity<Cliente> pesquisarCliente (@PathVariable Long id){
+	public ResponseEntity<Cliente> pesquisarCliente(@PathVariable Long id) {
 		Optional<Cliente> clienteOpt = clienteRepository.findById(id);
-		if(clienteOpt.isPresent()) {
+		if (clienteOpt.isPresent()) {
 			return ResponseEntity.ok(clienteOpt.get());
 		}
 		return ResponseEntity.notFound().build();
 	}
-	
+
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Cliente inserirCliente(@RequestBody Cliente cliente) {
+	public Cliente inserirCliente(@Valid @RequestBody Cliente cliente) {
 		cliente = clienteRepository.save(cliente);
 		return cliente;
 	}
-	
+
 	@PutMapping("/{id}")
-	public ResponseEntity<Cliente> atualizar(@PathVariable Long id,@RequestBody Cliente cliente){
+	public ResponseEntity<Cliente> atualizar(@Valid @PathVariable Long id, @RequestBody Cliente cliente) {
 		if (!clienteRepository.existsById(id)) {
 			return ResponseEntity.notFound().build();
 		}
@@ -56,9 +57,9 @@ public class ClienteController {
 		cliente = clienteRepository.save(cliente);
 		return ResponseEntity.ok(cliente);
 	}
-	
+
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deleteCliente(@PathVariable Long id){
+	public ResponseEntity<Void> deleteCliente(@PathVariable Long id) {
 		if (!clienteRepository.existsById(id)) {
 			return ResponseEntity.notFound().build();
 		}
