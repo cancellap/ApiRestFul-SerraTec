@@ -7,7 +7,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 
 @Embeddable
-public class Cacteristicas {
+public class Caracteristicas {
 
 	private String renavan;
 

@@ -1,0 +1,83 @@
+package br.org.serratec.mapeamento.domain;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorColumn;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
+
+//@MappedSuperclass
+
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name= "DTYPE")
+@Entity
+public class Fornecedor {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
+	@Column(length = 50)
+	@NotBlank(message = "Nome da pessoa deve ser preenchido")
+	@Size(min = 2, max = 50)
+	private String Nome;
+
+	@Column
+	private String email;
+
+	@Column
+	private String telefone;
+
+	public Fornecedor(Long id,
+			@NotBlank(message = "Nome da pessoa deve ser preenchido") @Size(min = 2, max = 50) String nome,
+			String email, String telefone) {
+		super();
+		this.id = id;
+		Nome = nome;
+		this.email = email;
+		this.telefone = telefone;
+	}
+
+	public Fornecedor() {
+		super();
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getNome() {
+		return Nome;
+	}
+
+	public void setNome(String nome) {
+		Nome = nome;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getTelefone() {
+		return telefone;
+	}
+
+	public void setTelefone(String telefone) {
+		this.telefone = telefone;
+	}
+
+}

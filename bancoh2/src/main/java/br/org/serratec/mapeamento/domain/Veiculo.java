@@ -1,11 +1,19 @@
 package br.org.serratec.mapeamento.domain;
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -34,7 +42,23 @@ public class Veiculo {
 	private String modelo;
 
 	@Embedded
-	private Cacteristicas caracteristicas;
+	private Caracteristicas caracteristicas;
+	
+	@OneToOne
+	@JoinColumn(name = "id_proprietario")
+	private Proprietario proprietario;
+
+	@JsonManagedReference
+	@OneToMany(mappedBy = "veiculo")
+	private List<Manutencao> manutencoes;
+	
+	public Proprietario getProprietario() {
+		return proprietario;
+	}
+
+	public void setProprietario(Proprietario proprietario) {
+		this.proprietario = proprietario;
+	}
 
 	public Long getId() {
 		return id;
@@ -68,13 +92,22 @@ public class Veiculo {
 		this.modelo = modelo;
 	}
 
-	public Cacteristicas getCaracteristicas() {
+	public Caracteristicas getCaracteristicas() {
 		return caracteristicas;
 	}
 
-	public void setCaracteristicas(Cacteristicas caracteristicas) {
+	public void setCaracteristicas(Caracteristicas caracteristicas) {
 		this.caracteristicas = caracteristicas;
 	}
 
+	public List<Manutencao> getManutencoes() {
+		return manutencoes;
+	}
+
+	public void setManutencoes(List<Manutencao> manutencoes) {
+		this.manutencoes = manutencoes;
+	}
+
+	
 	
 }
