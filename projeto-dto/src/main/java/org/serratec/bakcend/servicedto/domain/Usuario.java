@@ -1,12 +1,17 @@
 package org.serratec.bakcend.servicedto.domain;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Usuario {
@@ -22,14 +27,25 @@ public class Usuario {
 
 	private String senha;
 
-	public Usuario() {
-	}
+	@OneToMany(mappedBy = "id.usuario", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	private Set<UsuarioPerfil> usuarioPerfis = new HashSet<>();
 
 	public Usuario(Long id, String nome, String email, String senha) {
 		this.id = id;
 		this.nome = nome;
 		this.email = email;
 		this.senha = senha;
+	}
+
+	public Usuario() {
+	}
+
+	public Set<UsuarioPerfil> getUsuarioPerfis() {
+		return usuarioPerfis;
+	}
+
+	public void setUsuarioPerfis(Set<UsuarioPerfil> usuarioPerfis) {
+		this.usuarioPerfis = usuarioPerfis;
 	}
 
 	public Long getId() {

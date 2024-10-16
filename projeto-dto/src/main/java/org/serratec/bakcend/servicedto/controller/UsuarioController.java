@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.serratec.bakcend.servicedto.domain.Usuario;
+import org.serratec.bakcend.servicedto.dto.UsuarioDTO;
+import org.serratec.bakcend.servicedto.dto.UsuarioInserirDTO;
 import org.serratec.bakcend.servicedto.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,37 +17,39 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-  
+
 @RestController
 @RequestMapping("/usuarios")
 public class UsuarioController {
 
 	@Autowired
-	UsuarioService us;
-	
+	UsuarioService usuarioService;
+
 	@GetMapping
-	public ResponseEntity<List<Usuario>> listar (){
-		return ResponseEntity.ok(us.findAll());
+	public ResponseEntity<List<UsuarioDTO>> listar() {
+		return ResponseEntity.ok(usuarioService.findAll());
 	}
-	
+
 	@GetMapping("/{id}")
-	public ResponseEntity<Usuario> buscar(@PathVariable Long id){
-		Optional<Usuario> usuarioOpt = us.buscar(id);
+	public ResponseEntity<UsuarioDTO> buscar(@PathVariable Long id) {
+		Optional<Usuario> usuarioOpt = usuarioService.buscar(id);
 		if (usuarioOpt.isPresent()) {
-			return ResponseEntity.ok(usuarioOpt.get());			
+			UsuarioDTO usuario = new UsuarioDTO(usuarioOpt.get());
+			return ResponseEntity.ok(usuario);
 		}
 		return ResponseEntity.notFound().build();
-		
+
 	}
-	
+
 	@PostMapping
-	public ResponseEntity<Usuario>inserir(@RequestBody Usuario usuario){
-		usuario = us.inserir(usuario);
+	public ResponseEntity<UsuarioDTO> inserir(@RequestBody UsuarioInserirDTO usuarioInserirDTO) {
+		UsuarioDTO usuarioDTO = usuarioService.inserir(usuarioInserirDTO);
 		URI uri = ServletUriComponentsBuilder
 				.fromCurrentRequest()
 				.path("/{id}")
-				.buildAndExpand(usuario.getId())
+				.buildAndExpand(usuarioDTO.getId())
 				.toUri();
-		return ResponseEntity.created(uri).body(usuario);
+		return ResponseEntity.created(uri).body(usuarioDTO);
 	}
+	
 }
