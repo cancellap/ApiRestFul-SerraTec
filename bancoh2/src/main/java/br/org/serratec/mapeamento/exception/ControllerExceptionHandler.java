@@ -32,8 +32,9 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
 		return super.handleExceptionInternal(ex, erroResposta, headers, status, request);
 	}
 
-	//trata a execao lancado dentro do Combustivel
-	// sobrescrevendo o método handleHttpMessageNotReadable da classe ResponseEntityExceptionHandler
+	// trata a execao lancado dentro do Combustivel
+	// sobrescrevendo o método handleHttpMessageNotReadable da classe
+	// ResponseEntityExceptionHandler
 	@Override
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
 			HttpHeaders headers, HttpStatusCode status, WebRequest request) {

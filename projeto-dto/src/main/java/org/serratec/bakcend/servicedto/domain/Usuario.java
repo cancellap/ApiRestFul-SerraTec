@@ -1,8 +1,17 @@
 package org.serratec.bakcend.servicedto.domain;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -14,7 +23,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
 @Entity
-public class Usuario {
+public class Usuario implements UserDetails, Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,6 +51,17 @@ public class Usuario {
 		this.senha = senha;
 	}
 
+	@Override
+	public String toString() {
+		return "* Código: " + id +
+				"\n* Nome: " + nome + 
+				"\n* Email: " + email + 
+				"\n* Perfis: " + 
+				usuarioPerfis
+					.stream()
+					.map(up -> up.getId().getPerfil().getNome())
+						.collect(Collectors.joining(", "));
+	};
 	public Usuario() {
 	}
 
@@ -72,6 +97,10 @@ public class Usuario {
 		this.email = email;
 	}
 
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
 	public String getSenha() {
 		return senha;
 	}
@@ -95,6 +124,25 @@ public class Usuario {
 			return false;
 		Usuario other = (Usuario) obj;
 		return Objects.equals(id, other.id);
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		List<GrantedAuthority> authorities = new ArrayList<>();
+		for (UsuarioPerfil usuarioPerfil : getUsuarioPerfis()) {
+			authorities.add(new SimpleGrantedAuthority(usuarioPerfil.getId().getPerfil().getNome()));
+		}
+		return authorities;
+	}
+
+	@Override
+	public String getPassword() {
+		return senha;
+	}
+
+	@Override
+	public String getUsername() {
+		return email;
 	}
 
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import org.serratec.bakcend.servicedto.config.MailConfig;
 import org.serratec.bakcend.servicedto.domain.Perfil;
 import org.serratec.bakcend.servicedto.domain.Usuario;
 import org.serratec.bakcend.servicedto.domain.UsuarioPerfil;
@@ -15,6 +16,7 @@ import org.serratec.bakcend.servicedto.exception.EmailException;
 import org.serratec.bakcend.servicedto.exception.SenhaException;
 import org.serratec.bakcend.servicedto.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,10 +24,16 @@ import org.springframework.transaction.annotation.Transactional;
 public class UsuarioService {
 
 	@Autowired
+	private MailConfig mailConfg;
+	
+	@Autowired
 	private UsuarioRepository usuarioRepository;
 
 	@Autowired
 	private PerfilService perfilService;
+	
+	@Autowired
+	private BCryptPasswordEncoder encoder;
 
 	public List<UsuarioDTO> findAll() {
 		List<Usuario> usuarios = usuarioRepository.findAll();
@@ -54,7 +62,7 @@ public class UsuarioService {
 		Usuario usuario = new Usuario();
 		usuario.setNome(usuarioInserirDTO.getNome());
 		usuario.setEmail(usuarioInserirDTO.getEmail());
-		usuario.setSenha(usuarioInserirDTO.getSenha());
+		usuario.setSenha(encoder.encode(usuarioInserirDTO.getSenha()));
 
 		Set<UsuarioPerfil> perfis = new HashSet<>();
 		for (Perfil perfil : usuarioInserirDTO.getPerfis()) {
@@ -65,6 +73,7 @@ public class UsuarioService {
 		usuario.setUsuarioPerfis(perfis);
 
 		usuario = usuarioRepository.save(usuario);
+		mailConfg.sendEmail(usuario.getEmail(), "Cadastro do user", usuario.toString());
 
 		UsuarioDTO usuarioDTO = new UsuarioDTO(usuario);
 		return usuarioDTO;

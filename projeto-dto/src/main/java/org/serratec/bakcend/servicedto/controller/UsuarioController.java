@@ -10,6 +10,8 @@ import org.serratec.bakcend.servicedto.dto.UsuarioInserirDTO;
 import org.serratec.bakcend.servicedto.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,7 +28,9 @@ public class UsuarioController {
 	UsuarioService usuarioService;
 
 	@GetMapping
-	public ResponseEntity<List<UsuarioDTO>> listar() {
+	public ResponseEntity<List<UsuarioDTO>> listar() { //listar(@AuthenticationPrincipal UserDetails details) {
+		UserDetails details = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		System.out.println("Login do usuario: " + details.getUsername());
 		return ResponseEntity.ok(usuarioService.findAll());
 	}
 

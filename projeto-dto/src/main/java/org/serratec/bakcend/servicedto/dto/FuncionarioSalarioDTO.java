@@ -7,4 +7,5 @@ public interface FuncionarioSalarioDTO {
 	public Double getMenorSalario();
 	public Double getMaiorSalario();
 	public Double getTotalFuncionarios();
+	
 }
